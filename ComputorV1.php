@@ -1,5 +1,5 @@
 #!/usr/bin/php
-
+<?php
 class Equation {
 
 	public function __contruct($s) {
