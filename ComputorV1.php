@@ -20,23 +20,59 @@ class Equation {
 		if (count($leftparts) < count($rightparts))
 			$rightparts = [$leftparts, $leftparts = $rightparts][0];
 
-		foreach(leftparts as part) {
-			if (preg_match("/X\^0/g", part)) {
-				
+		foreach($leftparts as $part) {
+			if (strpos($part, "X^0") !== false) {
+				$part = str_replace("X^0", "", $part);
+				$part = str_replace("*", "", $part);
+				$this->c = $part;
 			}
-			if (preg_match("/X\^1/g", part)) {
-				
+			if (strpos($part, "X^1") !== false) {
+				$part = str_replace("X^1", "", $part);
+				$part = str_replace("*", "", $part);
+				$this->b = $part;
 			}
-			if (preg_match("/X\^2/g", part)) {
-				
+			if (strpos($part, "X^2") !== false) {
+				$part = str_replace("X^2", "", $part);
+				$part = str_replace("*","", $part);
+				$this->a = $part;
 			}
 			else {
-
+				echo "Parse error, you may have forgotten a pow in the equation"."\n";
 			}
 		}
+		echo "a=".$this->a.", b=".$this->b.", c=".$this->c;
 	}
 
 	public function calculateDiscriminant() {
-		
+
 	}
+}
+
+function checkArgs($args)
+{
+	if (count($args) > 2) {
+		echo "Too much arguments"."\n";
+	}
+	else if (count($args) < 2) {
+		echo "Please specify an equation"."\n";
+	}
+	else {
+		return(0);
+	}
+	return(1);
+}
+
+if (!checkArgs($argv)) {
+	$eqString = $argv[1];
+
+	// Remove spaces
+	$eqString = str_replace(" ", "", $eqString);
+
+	if (preg_match("/[^0-9X*+\-\^=.]/", $eqString) == 1 || (strpos($eqString, '=') === false)) {
+		echo "Not a valid equation, unauthorized characters or missing \"=\" symbol."."\n";
+		return;
+	}
+
+	$equation = new Equation($eqString);
+	$equation->parseEqString();
 }
