@@ -2,49 +2,42 @@
 <?php
 class Equation {
 
-	public function __contruct($s) {
-		$this->eqString = s;
-	}
-
-	public function parseEqString() {
+	public function __construct($s) {
+		$this->eqString = $s;
 
 		// Add 's' for separation.
-		$this->eqString = str_replace("+", "s+", $this->eqString);
-		$this->eqString = str_replace("-", "s-", $this->eqString);
+		$s = str_replace("+", "s+", $s);
+		$s = str_replace("-", "s-", $s);
 
 		// Get parts separated by '=' symbol.
-		$leftparts = explode("s", explode("=", $this->eqString)[0]);
-		$rightparts = explode("s", explode("=", $this->eqString)[1]);
+		$this->leftparts = explode("s", explode("=", $s)[0]);
+		$this->rightparts = explode("s", explode("=", $s)[1]);
 
 		// Swaps parts if inverted.
-		if (count($leftparts) < count($rightparts))
-			$rightparts = [$leftparts, $leftparts = $rightparts][0];
+		if (count($this->leftparts) < count($this->rightparts))
+			$this->rightparts = [$this->leftparts, $this->leftparts = $this->rightparts][0];
 
-		foreach($leftparts as $part) {
-			if (strpos($part, "X^0") !== false) {
-				$part = str_replace("X^0", "", $part);
-				$part = str_replace("*", "", $part);
-				$this->c = $part;
-			}
-			if (strpos($part, "X^1") !== false) {
-				$part = str_replace("X^1", "", $part);
-				$part = str_replace("*", "", $part);
-				$this->b = $part;
-			}
-			if (strpos($part, "X^2") !== false) {
-				$part = str_replace("X^2", "", $part);
-				$part = str_replace("*","", $part);
-				$this->a = $part;
-			}
-			else {
-				echo "Parse error, you may have forgotten a pow in the equation"."\n";
+		foreach($this->leftparts as $part) {
+			if (preg_match("/X\^([0-9]+)/", $part, $degree)) {
+				$val = preg_replace("/X\^([0-9]+)/", "", $part);
+				$val = str_replace("*", "", $val);
+				if (!is_numeric($val)) { 
+					echo "Error in degree parsing, maybe because of a bad character?"."\n";
+					exit();
+				}
+				if (intval($val) === 0) { continue; }
+				$this->degrees[intval($degree[1])] = intval($val);
 			}
 		}
-		echo "a=".$this->a.", b=".$this->b.", c=".$this->c;
 	}
 
-	public function calculateDiscriminant() {
+	public function getReducedForm() {
 
+	}
+
+	public function getDegree() {
+		$degree = max(array_keys($this->degrees));
+		echo "Polynomial degree: ".$degree."\n";
 	}
 }
 
@@ -68,11 +61,12 @@ if (!checkArgs($argv)) {
 	// Remove spaces
 	$eqString = str_replace(" ", "", $eqString);
 
-	if (preg_match("/[^0-9X*+\-\^=.]/", $eqString) == 1 || (strpos($eqString, '=') === false)) {
+	if (preg_match("/[^0-9X*+\-\^=.]+/", $eqString) == 1 || strpos($eqString, '=') === false) {
 		echo "Not a valid equation, unauthorized characters or missing \"=\" symbol."."\n";
 		return;
 	}
 
 	$equation = new Equation($eqString);
-	$equation->parseEqString();
+	$equation->getReducedForm();
+	$equation->getDegree();
 }
