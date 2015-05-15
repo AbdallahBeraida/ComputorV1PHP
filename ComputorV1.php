@@ -39,6 +39,14 @@ class Equation {
 		$degree = max(array_keys($this->degrees));
 		echo "Polynomial degree: ".$degree."\n";
 	}
+
+	public function solve() {
+
+	}
+
+	private function calculateDiscriminant() {
+
+	}
 }
 
 function checkArgs($args)
