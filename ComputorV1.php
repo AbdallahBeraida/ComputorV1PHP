@@ -59,7 +59,7 @@ class Equation {
 	}
 
 	public function getDegree() {
-		$this->degree = max(array_keys($this->leftdegrees));
+		$this->degree = max(array_keys($this->reducedform));
 		echo "Polynomial degree: ".$this->degree."\n";
 	}
 
@@ -75,15 +75,45 @@ class Equation {
 			echo "The solution is:"."\n".$x."\n";
 		}
 		else if ($this->degree == 2) {
-
+			$delta = $this->getDelta();
+			if ($delta > 0){
+				$s1 = (-$this->reducedform[1] + my_sqrt($delta, 8)) / ($this->reducedform[2] * 2);
+				$s2 = (-$this->reducedform[1] - my_sqrt($delta, 8)) / ($this->reducedform[2] * 2);
+				echo "Discriminant is ".$delta.", strictly positive, the two solutions are: "."\n";
+				echo $s1."\n".$s2."\n";
+			}
+			else if ($delta < 0){
+				$s1 = 0;
+				$s2 = 0;
+				echo "Discriminant is ".$delta.", strictly negative, the two imaginaries solutions are: "."\n";
+			}
+			else {
+				$s1 = -$this->reducedform[1] / 2 * $this->reducedform[2];
+				echo "Discriminant is 0, the solution is: "."\n";
+				echo $s1."\n";
+			}
 		}
 		else
 			echo "The polynomial degree is stricly greater than 2, I can't solve."."\n";
 	}
 
-	private function calculateDiscriminant() {
-
+	private function getDelta() {
+		$delta = $this->reducedform[1] * $this->reducedform[1] - 4 * $this->reducedform[2] * $this->reducedform[0];
+		return $delta;
 	}
+}
+
+function my_sqrt($number, $precision) {
+	$x = $number;
+	$i = 0;
+
+	if ($number <= 0)
+		return 0;
+	while ($i < $precision){
+		$x = ($x + ($number / $x)) / 2;
+		$i++;
+	}
+	return $x;
 }
 
 function checkArgs($args)
