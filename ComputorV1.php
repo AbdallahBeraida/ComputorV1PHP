@@ -70,10 +70,14 @@ class Equation {
 			else
 				echo "This equation has no solutions."."\n";
 		}
-		if ($this->degree == 1) {
+		else if ($this->degree == 1) {
+			$x = $this->reducedform[0] / -$this->reducedform[1];
+			echo "The solution is:"."\n".$x."\n";
+		}
+		else if ($this->degree == 2) {
 
 		}
-		if ($this->degree > 2)
+		else
 			echo "The polynomial degree is stricly greater than 2, I can't solve."."\n";
 	}
 
