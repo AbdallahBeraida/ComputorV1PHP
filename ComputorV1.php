@@ -83,9 +83,9 @@ class Equation {
 				echo $s1."\n".$s2."\n";
 			}
 			else if ($delta < 0){
-				$s1 = 0;
-				$s2 = 0;
 				echo "Discriminant is ".$delta.", strictly negative, the two imaginaries solutions are: "."\n";
+				echo "(-".$this->reducedform[1]." - i * sqrt(".-$delta.")) / ". 2*$this->reducedform[2]."\n";
+				echo "(-".$this->reducedform[1]." + i * sqrt(".-$delta.")) / ". 2*$this->reducedform[2]."\n";
 			}
 			else {
 				$s1 = -$this->reducedform[1] / 2 * $this->reducedform[2];
