@@ -49,7 +49,7 @@ class Equation {
 		foreach($this->rightdegrees as $key => $value) {
 			if (isset($this->reducedform[$key])) { $this->reducedform[$key] -= $value; }
 			else { $this->reducedform[$key] = 0 - $value; }
-			if ( $this->reducedform[$key] == 0) { unset($this->reducedform[$key]); }
+			if ( $this->reducedform[$key] == 0 && $key != 0) { unset($this->reducedform[$key]); }
 		}
 		echo "Reduced form: ";
 		foreach($this->reducedform as $key => $value) {
@@ -60,6 +60,7 @@ class Equation {
 	}
 
 	public function getDegree() {
+
 		$this->degree = max(array_keys($this->reducedform));
 		echo "Polynomial degree: ".$this->degree."\n";
 	}
