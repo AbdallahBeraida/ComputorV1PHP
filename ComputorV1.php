@@ -14,8 +14,8 @@ class Equation {
 		$this->rightparts = explode("s", explode("=", $s)[1]);
 
 		// Swaps parts if inverted.
-		if (count($this->leftparts) < count($this->rightparts))
-			$this->rightparts = [$this->leftparts, $this->leftparts = $this->rightparts][0];
+		//if (count($this->leftparts) < count($this->rightparts))
+		//	$this->rightparts = [$this->leftparts, $this->leftparts = $this->rightparts][0];
 
 		foreach($this->leftparts as $part) {
 			if (preg_match("/X\^([0-9]+)/", $part, $degree)) {
@@ -49,6 +49,7 @@ class Equation {
 		foreach($this->rightdegrees as $key => $value) {
 			if (isset($this->reducedform[$key])) { $this->reducedform[$key] -= $value; }
 			else { $this->reducedform[$key] = 0 - $value; }
+			if ( $this->reducedform[$key] == 0) { unset($this->reducedform[$key]); }
 		}
 		echo "Reduced form: ";
 		foreach($this->reducedform as $key => $value) {
